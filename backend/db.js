@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const { model, Schema, connect } = require('mongoose');
 
 try {
-    mongoose.connect("mongodb://127.0.0.1:27017/paytm")
+    connect("mongodb://127.0.0.1:27017/paytm")
         .then(() => {
             console.log("Connected to database");
         })
@@ -10,7 +10,8 @@ try {
     console.log("[CONNECTION_ERROR]", error);
 };
 
-const userSchema = new mongoose.Schema({
+// Schema for User
+const userSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -48,8 +49,26 @@ const userSchema = new mongoose.Schema({
     },
 })
 
-const User = mongoose.model("User", userSchema);
+
+
+// Schema for Users account to store Balance
+const accountSchema = Schema({
+    userId: {
+        type: Schema.Types.ObjectId, //Setting Type to OBject ID of MongoDb
+        ref: 'User', // Ref to User Model
+        required: true
+    },
+    balance: {
+        type: Number,
+        required: true
+    }
+})
+
+// Creating Models
+const Account = model("Account", accountSchema);
+const User = model("User", userSchema);
 
 module.exports = {
     User,
+    Account,
 }

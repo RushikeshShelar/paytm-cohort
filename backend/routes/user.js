@@ -1,8 +1,7 @@
 const express = require("express");
-const zod = require("zod");
 const jwt = require("jsonwebtoken");
 
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const authMiddleware = require("../middleware");
 const { JWT_SECRET_TOKEN } = require("../config"); // JWT_SECRET_TOKEN is a string that you can set to anything you want. It is used to sign the JWT token.
 const {
@@ -48,6 +47,7 @@ router.post("/signup", async (req, res) => {
 
         const hashedPassword = await generateHashedPassword(body.password, salt);
 
+        //  Create User
         const user = await User.create({
             username: body.username,
             password: hashedPassword,
@@ -58,6 +58,13 @@ router.post("/signup", async (req, res) => {
         });
 
         const userId = user._id;
+        let randombalance = (1 + Math.random() * 10000); //Generate Random amount between 1 to 10000
+        randombalance = Math.round((randombalance + Number.EPSILON) * 100) / 100
+        // Create Account for the User
+        await Account.create({
+            userId: userId,
+            balance: randombalance
+        })
 
         const token = jwt.sign(
             {
@@ -138,6 +145,16 @@ router.put("/", authMiddleware, async (req, res) => {
             return res.status(411).json({
                 message: "Incorrect inputs",
             });
+        }
+
+        const userExist = await User.findOne({
+            _id: userId
+        })
+
+        if (!userExist) {
+            return res.status(400).json({
+                error: "No Users Found"
+            })
         }
 
         const user = await User.findOneAndUpdate(
