@@ -59,7 +59,6 @@ router.post("/signup", async (req, res) => {
 
         const userId = user._id;
         let randombalance = (1 + Math.random() * 10000); //Generate Random amount between 1 to 10000
-        randombalance = Math.round((randombalance + Number.EPSILON) * 100) / 100
         // Create Account for the User
         await Account.create({
             userId: userId,
