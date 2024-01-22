@@ -1,7 +1,7 @@
 const { model, Schema, connect } = require('mongoose');
 
 try {
-    connect("mongodb://127.0.0.1:27017/paytm")
+    connect("mongodb://LAPTOP-L2BFAKIG:27017/paytm?replicaSet=rs")
         .then(() => {
             console.log("Connected to database");
         })
