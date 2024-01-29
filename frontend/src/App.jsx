@@ -4,6 +4,9 @@ import {
   Routes
 } from "react-router-dom";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
@@ -21,6 +24,7 @@ function App() {
           <Route path="/send" element={<SendMoney />}/>
         </Routes>
       </BrowserRouter>
+      <ToastContainer autoClose={2000} />
     </>
   )
 }
