@@ -1,29 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import _ from "lodash";
+import { useNavigate } from "react-router-dom";
+
+import { API_PATH, BACKEND_URL } from "../../config";
 import { Button } from "./Button";
+
 
 export const Users = () => {
 
-    const [users, setUser] = useState([{
-        firstName: "Rushikesh",
-        lastName: "Shelar"
-    }])
+    const [users, setUser] = useState([]);
+    const [filter, setFilter] = useState("");
+
+    const debouncedFetchUsers = _.debounce(async (filter) => {
+        const response = await axios.get(`${BACKEND_URL}/${API_PATH}/user/bulk?filter=` + filter);
+        const users = response.data.user;
+        users.filter((user) => user.username !== localStorage.getItem("username"))
+        users.sort((a, b) => a.firstName.localeCompare(b.firstName));
+        setUser(users);
+    },400);
+
+    useEffect(() => {
+        debouncedFetchUsers(filter);
+        return () => debouncedFetchUsers.cancel();
+    }, [filter, setFilter])
+
 
     return (
         <>
-        <div className="font-bold mt-6 text-lg">
-            Users
-        </div>
-        <div className="my-2">
-            <input type="text" placeholder="Search users..." className="w-full px-2 py-1 border rounded border-slate-200"></input>
-        </div>
-        <div>
-            {users.map((user,index) => <User user={user} key={index} />)}
-        </div>
+            <div className="font-bold mt-6 text-lg">
+                Users
+            </div>
+            <div className="my-2">
+                <input onChange={(e) => {
+                    setFilter(e.target.value);
+                }}
+                    type="text" placeholder="Search users..." className="w-full px-2 py-1 border rounded border-slate-200"></input>
+            </div>
+            <div>
+                {users.map((user, index) => <User user={user} key={index} />)}
+            </div>
         </>
     );
 }
 
-function User({user}) {
+function User({ user }) {
+
+    const navigate = useNavigate();
+
     return <div className="flex justify-between">
         <div className="flex">
             <div className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2">
@@ -39,7 +63,10 @@ function User({user}) {
         </div>
 
         <div className="flex flex-col justify-center h-ful">
-            <Button label={"Send Money"} />
+            <Button onClick={() => {
+                navigate(`/send?id=${user._id}&firstName=${user.firstName}&lastName=${user.lastName}`)
+            }}
+            label={"Send Money"} />
         </div>
     </div>
 }
