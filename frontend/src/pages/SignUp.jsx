@@ -6,11 +6,14 @@ import { Heading } from "../components/Heading"
 import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import axios from "axios"
-import { BACKEND_URL, USER_PATH } from "../../config"
+import { API_PATH, BACKEND_URL} from "../../config"
+import { useNavigate } from "react-router-dom"
 
 
 
 const Signup = () => {
+
+  const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -29,16 +32,19 @@ const Signup = () => {
   }
 
   const handleSignUp = async () => {
-    console.log(`${BACKEND_URL}${USER_PATH}/signup`);
-    const response = await axios.post(`${BACKEND_URL}/${USER_PATH}/signup`, {
+    // console.log(`${BACKEND_URL}/${API_PATH}/signup`);
+    const response = await axios.post(`${BACKEND_URL}/${API_PATH}/user/signup`, {
       firstName: firstName,
       lastName: lastName,
       username: userName,
       password: passWord,
       email: email
     });
+    
     localStorage.setItem("token", response.data.token);
     resetState(); 
+    navigate("/dashboard");
+    
   }
 
   return <div className="bg-slate-300 h-screen flex justify-center">
