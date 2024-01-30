@@ -22,6 +22,7 @@ const Signin = () => {
         password: passWord
       })
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("username", userName);
       navigate("/dashboard");
     } catch (error) {
       console.log("[SIGN_IN_ERROR]", error);

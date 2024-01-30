@@ -33,17 +33,22 @@ const Signup = () => {
 
   const handleSignUp = async () => {
     // console.log(`${BACKEND_URL}/${API_PATH}/signup`);
-    const response = await axios.post(`${BACKEND_URL}/${API_PATH}/user/signup`, {
-      firstName: firstName,
-      lastName: lastName,
-      username: userName,
-      password: passWord,
-      email: email
-    });
-    
-    localStorage.setItem("token", response.data.token);
-    resetState(); 
-    navigate("/dashboard");
+    try {
+      const response = await axios.post(`${BACKEND_URL}/${API_PATH}/user/signup`, {
+        firstName: firstName,
+        lastName: lastName,
+        username: userName,
+        password: passWord,
+        email: email
+      });
+      
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", userName);
+      resetState(); 
+      navigate("/dashboard");
+    } catch (error) {
+      console.log("[SIGN_UP_ERROR]", error);
+    }
     
   }
 
