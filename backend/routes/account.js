@@ -8,15 +8,22 @@ const router = express.Router();
 
 // Path: GET /account/balance
 router.get("/balance", authMiddleware, async (req, res) => {
-    const { userId } = req;
+    try {
+        const { userId } = req;
 
-    const account = await Account.findOne({
-        userId
-    });
+        const account = await Account.findOne({
+            userId
+        });
 
-    res.json({
-        balance: account.balance
-    })
+        res.json({
+            balance: account.balance
+        })
+    } catch (error) {
+        console.log("[BALANCE_ERROR]", error);
+        res.status(400).json({
+            error: "Something went wrong"
+        })
+    }
 });
 
 // Path: POST /account/transfer
@@ -37,7 +44,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
         // Using Transactions in MONGODM using Mongoose
 
         // Create a Session
-        const session =  await mongoose.startSession();
+        const session = await mongoose.startSession();
 
         // Start Transaction
         await session.startTransaction();
