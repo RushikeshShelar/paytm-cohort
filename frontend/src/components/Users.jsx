@@ -11,13 +11,16 @@ export const Users = () => {
 
     const [users, setUser] = useState([]);
     const [filter, setFilter] = useState("");
-
+    const currentUser = localStorage.getItem("username").toLocaleLowerCase();
+    
     const debouncedFetchUsers = _.debounce(async (filter) => {
         const response = await axios.get(`${BACKEND_URL}/${API_PATH}/user/bulk?filter=` + filter);
         const users = response.data.user;
-        users.filter((user) => user.username !== localStorage.getItem("username"))
-        users.sort((a, b) => a.firstName.localeCompare(b.firstName));
-        setUser(users);
+        const newUsers = await users.filter((user) => {
+            return user.username.toLowerCase() !== currentUser.toLowerCase();
+          });
+        newUsers.sort();
+        setUser(newUsers);
     },400);
 
     useEffect(() => {
