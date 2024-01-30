@@ -1,7 +1,9 @@
 const { model, Schema, connect } = require('mongoose');
 
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+
 try {
-    connect("mongodb://LAPTOP-L2BFAKIG:27017/paytm?replicaSet=rs")
+    connect(process.env.MONGO_DB_URL, clientOptions)
         .then(() => {
             console.log("Connected to database");
         })
