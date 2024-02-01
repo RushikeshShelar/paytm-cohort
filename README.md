@@ -12,3 +12,4 @@ Features:
 - View Balance
 - Find All Users 
 - Send Money
+- Receive Money
