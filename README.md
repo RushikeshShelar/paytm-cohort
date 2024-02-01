@@ -15,3 +15,13 @@ Features:
 - Receive Money
 - Sign In
 - Sign Up
+
+Api End Points:
+Users
+- POST /users/signin
+- POST /users/signup
+- PUT /users
+- GET /users?bulk
+
+
+
