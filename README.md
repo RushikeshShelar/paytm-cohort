@@ -14,3 +14,4 @@ Features:
 - Send Money
 - Receive Money
 - Sign In
+- Sign Up
