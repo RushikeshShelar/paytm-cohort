@@ -11,3 +11,4 @@ Database : MongoDB
 Features:
 - View Balance
 - Find All Users 
+- Send Money
