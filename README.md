@@ -21,7 +21,11 @@ Users
 - POST /users/signin
 - POST /users/signup
 - PUT /users
-- GET /users?bulk
+- GET /users/bulk?filter=
+
+Account
+- GET /balance
+- POST /transfer
 
 
 
